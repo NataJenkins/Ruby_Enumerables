@@ -41,6 +41,11 @@ module Enumerable
 
     #my_map
     def my_map(&block)
+      result = Array.new
+      self.my_each do |n|
+        yield(n)
+      end
+      return result
     end
 
     #my_inject
