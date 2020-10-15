@@ -10,6 +10,10 @@ module Enumerable
 
     #my_each_with_index
     def my_each_with_index(&block)
+        self.length().times do |i|
+          yield(self[i],i)
+        end
+        return self
     end
 
     #my_select
