@@ -18,6 +18,9 @@ module Enumerable
 
     #my_select
     def my_select(&block)
+        self.my_each do |elem|
+            elem if yield(elem) == true
+        end
     end
 
     #my_all?
