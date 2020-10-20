@@ -131,6 +131,25 @@ module Enumerable
 
   # my_inject
   def my_inject(*_args)
-   
+    if !block_given? && args.empty?
+
+      start = 0
+      if args[0].is_a? Numeric
+        total = args[0]
+        sym = args[1].to_s
+      elsif (args[0].is_a? Symbol) || args[0].nil?
+        total = Array(self)[0]
+        sym = args[0].to_s
+        start = 1
+      end
+      (start...Array(self).length).my_each do |i|
+        total = if block_given?
+                  yield(total, Array(self)[i])
+                else
+                  total.send(sym, Array(self)[i])
+                end
+      end
+      total
+    end
   end
 end
