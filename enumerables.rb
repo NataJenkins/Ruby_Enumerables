@@ -18,7 +18,7 @@ module Enumerable
   end
 
   # my_select
-  def my_select(&block)
+  def my_select()
     my_each do |elem|
       elem if yield(elem) == true
     end
@@ -121,7 +121,7 @@ module Enumerable
   end
 
   # my_map
-  def my_map(&block)
+  def my_map()
     result = []
     my_each do |n|
       yield(n)
