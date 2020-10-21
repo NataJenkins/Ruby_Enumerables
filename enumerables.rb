@@ -141,5 +141,3 @@ module Enumerable
     total
   end
 end
-
-
