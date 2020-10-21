@@ -26,24 +26,24 @@ module Enumerable
 
   # my_all?
   def my_all?(arg = nil)
-    if block_given? # con bloque sin argumento
+    # con bloque sin argumento
+    if block_given?
       each do |item|
         return false if yield(item) == false
       end
-    else # con argumento
-      if arg.class == Regexp
-        each do |item|
-          return false if arg.match?(item) == false
-        end
-      elsif arg.class == Class
-        each do |item|
-          return false if item.is_a?(arg) == false
-        end
-      elsif arg.nil?
-        each do |item|
-          return false unless item
-        end
-      end
+    elsif if arg.class == Regexp
+            each do |item|
+              return false if arg.match?(item) == false
+            end
+          elsif arg.class == Class
+            each do |item|
+              return false if item.is_a?(arg) == false
+            end
+          elsif arg.nil?
+            each do |item|
+              return false unless item
+            end
+          end
     end
     true
   end
@@ -54,20 +54,20 @@ module Enumerable
       each do |item|
         return true if yield(item) == true
       end
-    else # con argumento
-      if arg.class == Regexp
-        each do |item|
-          return true if arg.match?(item) == true
-        end
-      elsif arg.class == Class
-        each do |item|
-          return true if item.is_a?(arg) == true
-        end
-      elsif arg.nil?
-        each do |item|
-          return true if item
-        end
-      end
+      # con argumento
+    elsif if arg.class == Regexp
+            each do |item|
+              return true if arg.match?(item) == true
+            end
+          elsif arg.class == Class
+            each do |item|
+              return true if item.is_a?(arg) == true
+            end
+          elsif arg.nil?
+            each do |item|
+              return true if item
+            end
+          end
     end
     false
   end
@@ -78,43 +78,34 @@ module Enumerable
       each do |item|
         return false if yield(item) == true
       end
-    else # con argumento
-      if arg.class == Regexp
-        each do |item|
-          return false if arg.match?(item) == true
-        end
-      elsif arg.class == Class
-        each do |item|
-          return false if item.is_a?(arg) == true
-        end
-      elsif arg.nil?
-        each do |item|
-          return false if item
-        end
-      end
+      # con argumento
+    elsif if arg.class == Regexp
+            each do |item|
+              return false if arg.match?(item) == true
+            end
+          elsif arg.class == Class
+            each do |item|
+              return false if item.is_a?(arg) == true
+            end
+          elsif arg.nil?
+            each do |item|
+              return false if item
+            end
+          end
     end
     true
   end
 
-  # my_count
-  def my_count(*num)
-    array = to_a
+  def my_count(argument = nil)
     count = 0
-    if num.length.zero?
-      i = 0
-      while i < array.length
-        if block_given?
-          count += 1 if yield array[i]
-        else
-          return array.length
-        end
-        i += 1
-      end
-    elsif num.length == 1
-      i = 0
-      while i < array.length
-        count += 1 if num[0] == array[i]
-        i += 1
+    Array(self).my_each do |item|
+      if !block_given?
+        return Array(self).length if argument.nil?
+        next if item != argument
+
+        count += 1
+      elsif yield(item) == true
+        count += 1
       end
     end
     count
@@ -130,26 +121,25 @@ module Enumerable
   end
 
   # my_inject
-  def my_inject(*_args)
-    if !block_given? && args.empty?
-
-      start = 0
-      if args[0].is_a? Numeric
-        total = args[0]
-        sym = args[1].to_s
-      elsif (args[0].is_a? Symbol) || args[0].nil?
-        total = Array(self)[0]
-        sym = args[0].to_s
-        start = 1
-      end
-      (start...Array(self).length).my_each do |i|
-        total = if block_given?
-                  yield(total, Array(self)[i])
-                else
-                  total.send(sym, Array(self)[i])
-                end
-      end
-      total
+  def my_inject(*args)
+    start = 0
+    if args[0].is_a? Numeric
+      total = args[0]
+      sym = args[1].to_s
+    elsif (args[0].is_a? Symbol) || args[0].nil?
+      total = Array(self)[0]
+      sym = args[0].to_s
+      start = 1
     end
+    (start...Array(self).length).my_each do |i|
+      total = if block_given?
+                yield(total, Array(self)[i])
+              else
+                total.send(sym, Array(self)[i])
+              end
+    end
+    total
   end
 end
+
+
