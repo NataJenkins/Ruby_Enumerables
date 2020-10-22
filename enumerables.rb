@@ -3,6 +3,7 @@
 module Enumerable
   # my_each
   def my_each()
+    return to_enum(:my_each) unless block_given?
     length.times do |n|
       yield(self[n])
     end
@@ -11,6 +12,7 @@ module Enumerable
 
   # my_each_with_index
   def my_each_with_index()
+    return to_enum(:my_each) unless block_given?
     length.times do |i|
       yield(self[i], i)
     end
