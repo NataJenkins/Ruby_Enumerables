@@ -4,8 +4,11 @@ module Enumerable
   # my_each
   def my_each()
     return to_enum(:my_each) unless block_given?
+    arr = to_a if self.class == Range
+    arr = self if self.class == Array
+    arr = to_a if self.class == Hash
     length.times do |n|
-      yield(self[n])
+      yield(arr[n])
     end
     self
   end
@@ -13,8 +16,11 @@ module Enumerable
   # my_each_with_index
   def my_each_with_index()
     return to_enum(:my_each) unless block_given?
+    arr = to_a if self.class == Range
+    arr = self if self.class == Array
+    arr = to_a if self.class == Hash
     length.times do |i|
-      yield(self[i], i)
+      yield(arr[i], i)
     end
     self
   end
