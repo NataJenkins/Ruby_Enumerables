@@ -36,19 +36,19 @@ module Enumerable
   def my_all?(arg = nil)
     # con bloque sin argumento
     if block_given?
-      each do |item|
+      my_each do |item|
         return false if yield(item) == false
       end
     elsif if arg.class == Regexp
-            each do |item|
-              return false if arg.match?(item) == false
+      my_each do |item|
+              return false if arg.match?(item) == false   
             end
           elsif arg.class == Class
-            each do |item|
+            my_each do |item|
               return false if item.is_a?(arg) == false
             end
           elsif arg.nil?
-            each do |item|
+            my_each do |item|
               return false unless item
             end
           end
@@ -56,23 +56,25 @@ module Enumerable
     true
   end
 
+
+
   # my_any?
   def my_any?(arg = nil)
     if block_given? # con bloque sin argumento
-      each do |item|
+      my_each do |item|
         return true if yield(item) == true
       end
       # con argumento
     elsif if arg.class == Regexp
-            each do |item|
+      my_each do |item|
               return true if arg.match?(item) == true
             end
           elsif arg.class == Class
-            each do |item|
+            my_each do |item|
               return true if item.is_a?(arg) == true
             end
           elsif arg.nil?
-            each do |item|
+            my_each do |item|
               return true if item
             end
           end
@@ -83,20 +85,20 @@ module Enumerable
   # my_none?
   def my_none?(arg = nil)
     if block_given? # con bloque sin argumento
-      each do |item|
+      my_each do |item|
         return false if yield(item) == true
       end
       # con argumento
     elsif if arg.class == Regexp
-            each do |item|
+      my_each do |item|
               return false if arg.match?(item) == true
             end
           elsif arg.class == Class
-            each do |item|
+            my_each do |item|
               return false if item.is_a?(arg) == true
             end
           elsif arg.nil?
-            each do |item|
+            my_each do |item|
               return false if item
             end
           end
@@ -149,5 +151,34 @@ module Enumerable
     total
   end
 end
+
+
+p '%%%%%%%%%%%%%%%%%%%%%%% MY ANY %%%%%%%%%%%%%%%%%%%%%'
+p %w[ant bear cat].my_any? { |word| word.length >= 3 } == %w[ant bear cat].any? { |word| word.length >= 3 }
+p %w[ant bear cat].my_any?(/d/) == %w[ant bear cat].any?(/d/)
+p %w[ant bear cat].my_any?(/a/) == %w[ant bear cat].any?(/a/)
+p [nil, true, 99].my_any?(Integer) == [nil, true, 99].any?(Integer)
+p [nil, true, 99].my_any?(String) == [nil, true, 99].any?(String)
+p [nil, true, 99].my_any?(Float) == [nil, true, 99].any?(Float)
+p [nil, true, 99].my_any? == [nil, true, 99].any?
+p [].my_any? == [].any?
+
+p '%%%%%%%%%%%%%%%%%%%%%%% MY ALL %%%%%%%%%%%%%%%%%%%%%'
+p %w[ant bear cat].my_all? { |word| word.length >= 3 } == %w[ant bear cat].all? { |word| word.length >= 3 } 
+p %w[ant bear cat].my_all? { |word| word.length >= 4 } == %w[ant bear cat].all? { |word| word.length >= 4 } 
+p %w[ant bear cat].my_all?(/t/) == %w[ant bear cat].all?(/t/)                        
+p [1, 2i, 3.14].my_all?(Numeric) == [1, 2i, 3.14].all?(Numeric)                      
+p [nil, true, 99].my_all? == [nil, true, 99].all?                           
+p [].my_all? == [].all?                                           
+
+p '%%%%%%%%%%%%%%%%%%%%%%% MY NONE %%%%%%%%%%%%%%%%%%%%%'
+p %w{ant bear cat}.my_none? { |word| word.length == 5 } == %w{ant bear cat}.none? { |word| word.length == 5 }
+p %w{ant bear cat}.my_none? { |word| word.length >= 4 } == %w{ant bear cat}.none? { |word| word.length >= 4 }
+p %w{ant bear cat}.my_none?(/d/) == %w{ant bear cat}.none?(/d/)
+p [1, 3.14, 42].my_none?(Float) == [1, 3.14, 42].none?(Float)
+p [].my_none? == [].none?
+p [nil].my_none? == [nil].none?
+p [nil, false].my_none? ==  [nil, false].none?
+p [nil, false, true].my_none? == [nil, false, true].none?
 
 # rubocop:enable Metrics/ModuleLength,Metrics/CyclomaticComplexity,Metrics/PerceivedComplexity
