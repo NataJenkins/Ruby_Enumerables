@@ -6,7 +6,7 @@ module Enumerable
     arr = to_a if self.class == Range
     arr = self if self.class == Array
     arr = to_a if self.class == Hash
-    length.times do |n|
+    Array(self).length.times do |n|
       yield(arr[n])
     end
     self
@@ -19,7 +19,7 @@ module Enumerable
     arr = to_a if self.class == Range
     arr = self if self.class == Array
     arr = to_a if self.class == Hash
-    length.times do |i|
+    Array(self).length.times do |i|
       yield(arr[i], i)
     end
     self
@@ -27,9 +27,13 @@ module Enumerable
 
   # my_select
   def my_select()
-    my_each do |elem|
-      elem if yield(elem) == true
+    result = []
+    return to_enum unless block_given?
+    Array(self).my_each do |elem|
+      next unless yield(elem)
+      result.push(elem)
     end
+    result
   end
 
   # my_all?
@@ -154,3 +158,5 @@ end
 def multiply_els(arr)
   arr.my_inject(1, :*)
 end
+
+print (0..2).my_select { |num| num.even? } #=> [0, 2]
