@@ -29,8 +29,10 @@ module Enumerable
   def my_select()
     result = []
     return to_enum unless block_given?
+
     Array(self).my_each do |elem|
       next unless yield(elem)
+
       result.push(elem)
     end
     result
@@ -159,4 +161,21 @@ def multiply_els(arr)
   arr.my_inject(1, :*)
 end
 
-print (0..2).my_select { |num| num.even? } #=> [0, 2]
+# p (0..5).my_none? == (0..5).none?
+# p (0..5).my_any? == (0..5).any?
+# p (0..5).my_all? == (0..5).all?
+
+# p (1..4).my_map { |i| i*i }
+# p (1..4).map { |i| i*i }
+# p (1..4).my_map { "cat"  }
+# p (1..4).map { "cat"  }
+
+# p [1,2,3,4,5].my_inject(:*) == [1,2,3,4,5].inject(:*)
+# p [1,2,3,4,5].my_inject(2, :*) ==[1,2,3,4,5].inject(2, :*)
+# p (5..10).my_inject { |sum, n| sum + n } == (5..10).inject { |sum, n| sum + n }
+# p (1..5).my_inject(:*) == (1..5).inject(:*)
+# p (1..5).my_inject(2, :*) == (1..5).inject(2, :*)
+# p [5,6,7,8,9,10].my_inject(1) { |product, n| product * n } == [5,6,7,8,9,10].inject(1) { |product, n| product * n }
+# p (5..10).my_inject(1) { |product, n| product * n } == (5..10).inject(1) { |product, n| product * n }
+
+print multiply_els([2, 4, 5])
