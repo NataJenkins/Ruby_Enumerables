@@ -45,22 +45,22 @@ module Enumerable
       my_each do |item|
         return false if yield(item) == true
       end
-    elsif if arg.class == Regexp 
+    elsif if arg.class == Regexp
             my_each do |item|
               return false if arg.match?(item) == false
             end
           elsif arg.class == Class
             my_each do |item|
-              return "ola" if item.is_a?(arg) == false
+              return false if item.is_a?(arg) == false
             end
           elsif arg.nil?
             my_each do |item|
               return false unless item
             end
           else
-            my_each do |item| 
-              return false if item != arg 
-          end
+            my_each do |item|
+              return false if item != arg
+            end
           end
     end
     true
@@ -86,9 +86,9 @@ module Enumerable
               return true if item
             end
           else
-            my_each do |item| 
-              return true if item == arg 
-          end
+            my_each do |item|
+              return true if item == arg
+            end
           end
     end
     false
@@ -114,9 +114,9 @@ module Enumerable
               return false if item
             end
           else
-            my_each do |item| 
-              return false if item == arg 
-          end
+            my_each do |item|
+              return false if item == arg
+            end
           end
     end
     true
@@ -208,7 +208,7 @@ end
 
 my_proc = proc { |w| w * 2 }
 
-words = ['Purple', 'PinkFloyd', 'Microverse']
+words = %w[Purple PinkFloyd Microverse]
 
 p words.map(&my_proc)
 p words.my_map(my_proc)
