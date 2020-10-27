@@ -139,12 +139,22 @@ module Enumerable
 
   # my_map
 
-  def my_map()
-    result = []
-    my_each do |n|
-      result << yield(n)
+  def my_map(argument = nil)
+    arr = []
+
+    if argument.class == Proc
+      Array(self).my_each do |item|
+        arr.push(argument.call(item))
+      end
+      return arr
     end
-    result
+
+    return to_enum unless block_given?
+
+    Array(self).my_each do |item|
+      arr.push(yield(item))
+    end
+    arr
   end
 
   # my_inject
@@ -192,7 +202,13 @@ end
 # p [5,6,7,8,9,10].my_inject(1) { |product, n| product * n } == [5,6,7,8,9,10].inject(1) { |product, n| product * n }
 # p (5..10).my_inject(1) { |product, n| product * n } == (5..10).inject(1) { |product, n| product * n }
 
+# words = ['Purple', 'PinkFloyd', 'Microverse']
+# p words.my_none? 'cat'
+# p words.none? 'cat'
+
+my_proc = proc { |w| w * 2 }
+
 words = ['Purple', 'PinkFloyd', 'Microverse']
 
-p words.my_none? 'cat'
-p words.none? 'cat'
+p words.map(&my_proc)
+p words.my_map(my_proc)
