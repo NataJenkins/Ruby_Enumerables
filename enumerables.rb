@@ -43,20 +43,24 @@ module Enumerable
     # con bloque sin argumento
     if block_given?
       my_each do |item|
-        return false if yield(item) == false
+        return false if yield(item) == true
       end
-    elsif if arg.class == Regexp
+    elsif if arg.class == Regexp 
             my_each do |item|
               return false if arg.match?(item) == false
             end
           elsif arg.class == Class
             my_each do |item|
-              return false if item.is_a?(arg) == false
+              return "ola" if item.is_a?(arg) == false
             end
           elsif arg.nil?
             my_each do |item|
               return false unless item
             end
+          else
+            my_each do |item| 
+              return false if item != arg 
+          end
           end
     end
     true
@@ -81,6 +85,10 @@ module Enumerable
             my_each do |item|
               return true if item
             end
+          else
+            my_each do |item| 
+              return true if item == arg 
+          end
           end
     end
     false
@@ -105,6 +113,10 @@ module Enumerable
             my_each do |item|
               return false if item
             end
+          else
+            my_each do |item| 
+              return false if item == arg 
+          end
           end
     end
     true
@@ -137,6 +149,8 @@ module Enumerable
 
   # my_inject
   def my_inject(*args)
+    raise('LocalJumpError.new NO BLOCK OR ARGUMENT GIVEN!') if !block_given? && arguments.empty?
+
     start = 0
     if args[0].is_a? Numeric
       total = args[0]
@@ -178,4 +192,7 @@ end
 # p [5,6,7,8,9,10].my_inject(1) { |product, n| product * n } == [5,6,7,8,9,10].inject(1) { |product, n| product * n }
 # p (5..10).my_inject(1) { |product, n| product * n } == (5..10).inject(1) { |product, n| product * n }
 
-print multiply_els([2, 4, 5])
+words = ['Purple', 'PinkFloyd', 'Microverse']
+
+p words.my_none? 'cat'
+p words.none? 'cat'
