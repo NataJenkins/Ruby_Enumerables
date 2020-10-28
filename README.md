@@ -1,6 +1,17 @@
 # Enumerables
 
-> In this project, Ruby enmerable methods were replicated
+In this project, Ruby enmerable methods were replicated
+
+- #my_each
+- #my_each_with_index
+- #my_select
+- #my_all?
+- #my_any?
+- #my_none?
+- #my_count
+- #my_map (it also accepts proc)
+- #my_inject
+
 
 ## Built With
 
