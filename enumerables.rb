@@ -158,27 +158,47 @@ module Enumerable
   end
 
   # my_inject
-  def my_inject(*args)
-    raise('LocalJumpError.new NO BLOCK OR ARGUMENT GIVEN!') if !block_given? && args.empty?
+#   def my_inject(*args)
+#     raise('LocalJumpError.new NO BLOCK OR ARGUMENT GIVEN!') if !block_given? && args.empty?
 
-    start = 0
-    if args[0].is_a? Numeric
-      total = args[0]
-      sym = args[1].to_s
-    elsif (args[0].is_a? Symbol) || args[0].nil?
-      total = Array(self)[0]
-      sym = args[0].to_s
-      start = 1
-    end
-    (start...Array(self).length).my_each do |i|
-      total = if block_given?
-                yield(total, Array(self)[i])
-              else
-                total.send(sym, Array(self)[i])
-              end
-    end
-    total
+#     start = 0
+#     if args[0].is_a? Numeric
+#       total = args[0]
+#       sym = args[1].to_s
+#     elsif (args[0].is_a? Symbol) || args[0].nil?
+#       total = Array(self)[0]
+#       sym = args[0].to_s
+#       start = 1
+#     end
+#     (start...Array(self).length).my_each do |i|
+#       total = if block_given?
+#                 yield(total, Array(self)[i])
+#               else
+#                 total.send(sym, Array(self)[i])
+#               end
+#     end
+#     total
+#   end
+# end
+
+
+
+def my_inject(args = nil, sym = nil)
+  if (!args.nil? && sym.nil?) && (args.is_a?(Symbol) || args.is_a?(String))
+    sym = args
+    args = nil
   end
+  if !block_given? && !sym.nil?
+    to_a.my_each do |index| 
+      args = args.nil? ? index : args.send(sym, index) 
+    end
+  else
+    to_a.my_each do |item| 
+      args = args.nil? ? index : yield(args, index) 
+    end
+  end
+  args
+end
 end
 
 def multiply_els(arr)
