@@ -211,16 +211,16 @@ end
 # p words.map(&my_proc)
 # p words.my_map(my_proc)
 
-#p 'Test #my_all method'
-#p (%w[ant bear cat].my_all? { |word| word.length >= 3 }) == (%w[ant bear cat].all? { |word| word.length >= 3 })
-#p (%w[ant bear cat].my_all? { |word| word.length >= 4 }) == (%w[ant bear cat].all? { |word| word.length >= 4 })
-#p %w[ant bear cat].my_all?(/t/) == %w[ant bear cat].all?(/t/)
-#p [1, 2i, 3.14].my_all?(Numeric) == [1, 2i, 3.14].all?(Numeric)
-#p [nil, true, 99].my_all? == [nil, true, 99].all?
-#p [].my_all? ==[].all?
-#p [1, 2].my_all?(1) == [1, 2].all?(1)
-#p [1, 1].my_all?(1) == [1, 1].all?(1)
-#p %w[a b].my_all?('b') == %w[a b].all?('b')
-#p %w[a a].my_all?('a') == %w[a a].all?('a')
+# p 'Test #my_all method'
+# p (%w[ant bear cat].my_all? { |word| word.length >= 3 }) == (%w[ant bear cat].all? { |word| word.length >= 3 })
+# p (%w[ant bear cat].my_all? { |word| word.length >= 4 }) == (%w[ant bear cat].all? { |word| word.length >= 4 })
+# p %w[ant bear cat].my_all?(/t/) == %w[ant bear cat].all?(/t/)
+# p [1, 2i, 3.14].my_all?(Numeric) == [1, 2i, 3.14].all?(Numeric)
+# p [nil, true, 99].my_all? == [nil, true, 99].all?
+# p [].my_all? ==[].all?
+# p [1, 2].my_all?(1) == [1, 2].all?(1)
+# p [1, 1].my_all?(1) == [1, 1].all?(1)
+# p %w[a b].my_all?('b') == %w[a b].all?('b')
+# p %w[a a].my_all?('a') == %w[a a].all?('a')
 
 puts multiply_els([2, 4, 5])
