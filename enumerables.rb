@@ -40,28 +40,27 @@ module Enumerable
 
   # my_all?
   def my_all?(arg = nil)
-    # con bloque sin argumento
     if block_given?
-      my_each do |item|
-        return false if yield(item) == true
+      my_each do |item| 
+        return false if yield(item) == false 
       end
-    elsif if arg.class == Regexp
-            my_each do |item|
-              return false if arg.match?(item) == false
-            end
-          elsif arg.class == Class
-            my_each do |item|
-              return false if item.is_a?(arg) == false
-            end
-          elsif arg.nil?
-            my_each do |item|
-              return false unless item
-            end
-          else
-            my_each do |item|
-              return false if item != arg
-            end
-          end
+      return true
+    elsif arg.nil?
+      my_each do |item| 
+        return false if item.nil? || item == false 
+      end
+    elsif !arg.nil? && (arg.is_a? Class)
+      my_each do |item| 
+        return false unless [item.class, item.class.superclass].include?(arg) 
+      end
+    elsif !arg.nil? && arg.class == Regexp
+      my_each do |item|
+         return false unless arg.match(item) 
+      end
+    else
+      my_each do |item| 
+        return false if item != arg 
+      end
     end
     true
   end
@@ -157,64 +156,24 @@ module Enumerable
     arr
   end
 
-  def my_inject(args = nil, sym = nil)
-    if (!args.nil? && sym.nil?) && (args.is_a?(Symbol) || args.is_a?(String))
-      sym = args
-      args = nil
+  def my_inject(initial = nil, sym = nil)
+    if (!initial.nil? && sym.nil?) && (initial.is_a?(Symbol) || initial.is_a?(String))
+      sym = initial
+      initial = nil
     end
     if !block_given? && !sym.nil?
-      to_a.my_each do |index|
-        args = args.nil? ? index : args.send(sym, index)
-      end
+      to_a.my_each { |item| initial = initial.nil? ? item : initial.send(sym, item) }
     else
-      to_a.my_each do |_item|
-        args = args.nil? ? index : yield(args, index)
-      end
+      to_a.my_each { |item| initial = initial.nil? ? item : yield(initial, item) }
     end
-    args
+    initial
   end
 end
+
+
 
 def multiply_els(arr)
   arr.my_inject(1, :*)
 end
 
-# p (0..5).my_none? == (0..5).none?
-# p (0..5).my_any? == (0..5).any?
-# p (0..5).my_all? == (0..5).all?
-
-# p (1..4).my_map { |i| i*i }
-# p (1..4).map { |i| i*i }
-# p (1..4).my_map { "cat"  }
-# p (1..4).map { "cat"  }
-
-# p [1,2,3,4,5].my_inject(:*) == [1,2,3,4,5].inject(:*)
-# p [1,2,3,4,5].my_inject(2, :*) ==[1,2,3,4,5].inject(2, :*)
-# p (5..10).my_inject { |sum, n| sum + n } == (5..10).inject { |sum, n| sum + n }
-# p (1..5).my_inject(:*) == (1..5).inject(:*)
-# p (1..5).my_inject(2, :*) == (1..5).inject(2, :*)
-# p [5,6,7,8,9,10].my_inject(1) { |product, n| product * n } == [5,6,7,8,9,10].inject(1) { |product, n| product * n }
-# p (5..10).my_inject(1) { |product, n| product * n } == (5..10).inject(1) { |product, n| product * n }
-
-# words = ['Purple', 'PinkFloyd', 'Microverse']
-# p words.my_none? 'cat'
-# p words.none? 'cat'
-
-# my_proc = proc { |w| w * 2 }
-# words = %w[Purple PinkFloyd Microverse]
-# p words.map(&my_proc)
-# p words.my_map(my_proc)
-
-# p 'Test #my_all method'
-# p (%w[ant bear cat].my_all? { |word| word.length >= 3 }) == (%w[ant bear cat].all? { |word| word.length >= 3 })
-# p (%w[ant bear cat].my_all? { |word| word.length >= 4 }) == (%w[ant bear cat].all? { |word| word.length >= 4 })
-# p %w[ant bear cat].my_all?(/t/) == %w[ant bear cat].all?(/t/)
-# p [1, 2i, 3.14].my_all?(Numeric) == [1, 2i, 3.14].all?(Numeric)
-# p [nil, true, 99].my_all? == [nil, true, 99].all?
-# p [].my_all? ==[].all?
-# p [1, 2].my_all?(1) == [1, 2].all?(1)
-# p [1, 1].my_all?(1) == [1, 1].all?(1)
-# p %w[a b].my_all?('b') == %w[a b].all?('b')
-# p %w[a a].my_all?('a') == %w[a a].all?('a')
-
-puts multiply_els([2, 4, 5])
+p ["dog", "door", "rod", "blade"].my_inject{ |memo, word| memo.length > word.length ? memo : word }
