@@ -41,25 +41,25 @@ module Enumerable
   # my_all?
   def my_all?(arg = nil)
     if block_given?
-      my_each do |item| 
-        return false if yield(item) == false 
+      my_each do |item|
+        return false if yield(item) == false
       end
       return true
     elsif arg.nil?
-      my_each do |item| 
-        return false if item.nil? || item == false 
+      my_each do |item|
+        return false if item.nil? || item == false
       end
     elsif !arg.nil? && (arg.is_a? Class)
-      my_each do |item| 
-        return false unless [item.class, item.class.superclass].include?(arg) 
+      my_each do |item|
+        return false unless [item.class, item.class.superclass].include?(arg)
       end
     elsif !arg.nil? && arg.class == Regexp
       my_each do |item|
-         return false unless arg.match(item) 
+        return false unless arg.match(item)
       end
     else
-      my_each do |item| 
-        return false if item != arg 
+      my_each do |item|
+        return false if item != arg
       end
     end
     true
@@ -170,10 +170,6 @@ module Enumerable
   end
 end
 
-
-
 def multiply_els(arr)
   arr.my_inject(1, :*)
 end
-
-p ["dog", "door", "rod", "blade"].my_inject{ |memo, word| memo.length > word.length ? memo : word }
